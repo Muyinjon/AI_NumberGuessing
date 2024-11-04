@@ -56,5 +56,10 @@ def get_result(image):
     np_array = np.array(image).transpose()
     img_to_model = np.reshape(np_array, (1, 1, 28, 28))
     outputs = model(torch.Tensor(img_to_model))
-    _, predicted = torch.max(outputs, 1)
-    return predicted.item()
+    
+    # Apply softmax to get probabilities
+    probabilities = F.softmax(outputs, dim=1).detach().numpy()  # Convert to numpy for plotting
+    
+    predicted_digit = np.argmax(probabilities)
+    
+    return predicted_digit, probabilities
